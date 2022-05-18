@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Invoice;
-use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -16,17 +15,20 @@ class InvoiceController extends Controller
      *
      * @return JsonResponse
      */
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
         $fromDate = $request['date_from'];
         $toDate = $request['date_to'];
 
         if (!empty($request)) {
             if ($fromDate && $toDate) {
+                /** @noinspection PhpUndefinedMethodInspection */
                 return response()->json(['invoices' => Invoice::whereBetween('invoice_date', [$fromDate, $toDate])->get()]);
             } elseif ($fromDate) {
+                /** @noinspection PhpUndefinedMethodInspection */
                 return response()->json(['invoices' => Invoice::whereDate('invoice_date', '>=', $fromDate)->get()]);
             } elseif ($toDate) {
+                /** @noinspection PhpUndefinedMethodInspection */
                 return response()->json(['invoices' => Invoice::whereDate('invoice_date', '<=', $toDate)->get()]);
             }
         }
@@ -37,11 +39,12 @@ class InvoiceController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param Invoice $invoice
+     * @param $invoice_id
      * @return JsonResponse
      */
-    public function show($invoice_id)
+    public function show($invoice_id): JsonResponse
     {
+        /** @noinspection PhpUndefinedMethodInspection */
         $invoice = Invoice::where('invoice_id', $invoice_id)->firstOrFail();
 
         return response()->json([
