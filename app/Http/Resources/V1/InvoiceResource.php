@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\V1;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -20,7 +21,7 @@ class InvoiceResource extends JsonResource
             'invoice_id' => $this->invoice_id,
             'amount' => $this->amount,
             'currency' => $this->currency,
-            'invoice_date' => $this->created_at->format('d/m/Y'),
+            'invoice_date' => Carbon::parse($this->invoice_date)->format('d-m-Y'),
             'is_paid' => $this->is_paid,
         ];
     }
