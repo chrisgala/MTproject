@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('invoice_id');
             $table->string('amount')->charset('utf8mb4');
+            $table->string('currency');
             $table->dateTime('invoice_date');
             $table->boolean('is_paid');
             $table->timestamps();
