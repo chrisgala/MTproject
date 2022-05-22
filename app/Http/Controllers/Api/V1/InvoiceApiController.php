@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\V1\InvoiceCollection;
 use App\Http\Resources\V1\InvoiceResource;
 use App\Models\Invoice;
 use Illuminate\Http\JsonResponse;
@@ -14,11 +15,11 @@ class InvoiceApiController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return JsonResponse
+     * @return InvoiceCollection
      */
-    public function index(Request $request): JsonResponse
+    public function index(): InvoiceCollection
     {
-        return response()->json(['invoices' => Invoice::all()]);
+        return new InvoiceCollection(Invoice::paginate());
     }
 
     /**
@@ -31,11 +32,4 @@ class InvoiceApiController extends Controller
     {
         return new InvoiceResource($invoice);
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param Invoice $invoice
-     * @return Response
-     */
 }
