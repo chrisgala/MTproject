@@ -7,9 +7,7 @@ use App\Http\Resources\V1\InvoiceCollection;
 use App\Http\Resources\V1\InvoiceResource;
 use App\Services\V1\InvoiceQuery;
 use App\Models\Invoice;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class InvoiceApiController extends Controller
 {
@@ -38,10 +36,39 @@ class InvoiceApiController extends Controller
      * Display the specified resource.
      *
      * @param Invoice $invoice
-     * @return InvoiceResource
      */
-    public function show(Invoice $invoice): InvoiceResource
+    public function show(Request $request, Invoice $invoice)
     {
-        return new InvoiceResource($invoice);
+       if ($request->wantsJson() || $request->header('Accept')==='*/*') {
+           return new InvoiceResource($invoice);
+       }
+
+       if ($request->header('Accept')==='text/csv') {
+           $invoiceArr = new InvoiceResource($invoice);
+           $invoiceArr = $invoiceArr->toArray($request);
+           $invoiceArr = array_values($invoiceArr);
+           $csvHeaders = ['id', 'invoice_id', 'amount', 'currency', 'invoice_date', 'is_paid'];
+
+           $callback = function () use ($csvHeaders, $invoiceArr) {
+               $FH = fopen('php://output', 'w');
+               fputcsv($FH, $csvHeaders);
+               fputcsv($FH, (array)$invoiceArr);
+               fclose($FH);
+           };
+
+           $headers = [
+               'Content-type' => 'text/csv',
+               'Content-Disposition' => 'attachment; filename=galleries.csv'
+           ];
+
+           return response()->stream($callback, 200, $headers);
+       }
+
+       if (!$request->header('Accept')){
+           return response()->json(['Error' => 'You have to set an Accept Header. Supported types: application/json, text/csv'],406);
+       }
+       return response()->json(['Error' => 'Content type not supported. Supported types: application/json, text/csv'],406);
     }
+
+
 }
