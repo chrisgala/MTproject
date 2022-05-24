@@ -22,6 +22,6 @@ class LogRequests
         $ip = $request->getClientIp();
         $log = "$ip: $method@$url - {$duration}ms \n".
             "Request : {$request} \n";
-        Log::info($log);
+        Log::channel('api')->info($log);
     }
 }
