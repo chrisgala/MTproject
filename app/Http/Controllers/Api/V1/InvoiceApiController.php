@@ -58,7 +58,7 @@ class InvoiceApiController extends Controller
 
            $headers = [
                'Content-type' => 'text/csv',
-               'Content-Disposition' => 'attachment; filename=galleries.csv'
+               'Content-Disposition' => 'attachment; filename=invoices.csv'
            ];
 
            return response()->stream($callback, 200, $headers);
