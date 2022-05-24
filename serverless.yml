@@ -10,16 +10,24 @@ plugins:
 
 functions:
     api:
-        handler: index.php
+        handler: public/index.php
+        environment:
+          LOG_CHANNEL: stderr
+          SESSION_DRIVER: array
+          CACHE_DRIVER: array
         description: ''
         timeout: 28 # in seconds (API Gateway has a timeout of 29 seconds)
         layers:
             - ${bref:layer.php-81-fpm}
         events:
-            -   httpApi: '*'
+            -   httpApi:
+                  method: GET
+                  path: /api/v1/invoices
 
 # Exclude files from deployment
 package:
     patterns:
         - '!node_modules/**'
         - '!tests/**'
+        - '!storage/**'
+        - '!resources/assets/**'
