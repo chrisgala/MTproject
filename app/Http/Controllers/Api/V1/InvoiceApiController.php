@@ -39,7 +39,7 @@ class InvoiceApiController extends Controller
      *
      * @param Request $request
      * @param Invoice $invoice
-     * @return InvoiceResource|JsonResponse|StreamedResponse
+     * @return InvoiceResource|StreamedResponse|JsonResponse
      */
     public function show(Request $request, Invoice $invoice): InvoiceResource|StreamedResponse|JsonResponse
     {
