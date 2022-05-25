@@ -7,7 +7,9 @@ use App\Http\Resources\V1\InvoiceCollection;
 use App\Http\Resources\V1\InvoiceResource;
 use App\Services\V1\InvoiceQuery;
 use App\Models\Invoice;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class InvoiceApiController extends Controller
 {
@@ -35,9 +37,11 @@ class InvoiceApiController extends Controller
     /**
      * Display the specified resource.
      *
+     * @param Request $request
      * @param Invoice $invoice
+     * @return InvoiceResource|JsonResponse|StreamedResponse
      */
-    public function show(Request $request, Invoice $invoice)
+    public function show(Request $request, Invoice $invoice): InvoiceResource|StreamedResponse|JsonResponse
     {
        if ($request->wantsJson() || $request->header('Accept')==='*/*') {
            return new InvoiceResource($invoice);
